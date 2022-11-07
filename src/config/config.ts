@@ -6,8 +6,8 @@ export default () => ({
     type: 'postgres',
     host: 'localhost',
     port: parseInt(process.env.DATABASE_PORT) || 5432,
-    username: 'admin',
-    password: 'admin',
+    username: 'darts',
+    password: 'darts',
     databaseName: 'darts',
   },
 });
