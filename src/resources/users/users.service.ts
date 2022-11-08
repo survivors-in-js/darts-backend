@@ -16,25 +16,26 @@ export class UsersService {
     const { password, ...res } = createUserDto;
     return await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
-        password: password,
+        password: hash,
         ...res,
       }),
     );
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.userRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, user: UpdateUserDto) {
+    await this.userRepository.update(id, user);
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    await this.userRepository.delete({ id });
   }
 }
