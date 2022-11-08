@@ -12,6 +12,7 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
   async create(createUserDto: CreateUserDto) {
     const { password, ...res } = createUserDto;
     return await bcrypt.hash(password, 10).then((hash) =>
@@ -22,20 +23,20 @@ export class UsersService {
     );
   }
 
-  findAll() {
+  public findAll() {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
+  public findOne(id: number) {
     return this.userRepository.findOneBy({ id });
   }
 
-  async update(id: number, user: UpdateUserDto) {
+  public async update(id: number, user: UpdateUserDto) {
     await this.userRepository.update(id, user);
     return user;
   }
 
-  async remove(id: number) {
+  public async remove(id: number) {
     await this.userRepository.delete({ id });
   }
 }
