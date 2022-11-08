@@ -13,30 +13,41 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const { password, ...res } = createUserDto;
-    return await bcrypt.hash(password, 10).then((hash) =>
+  public async create(createUserDto: CreateUserDto): Promise<any> {
+    const { password, email } = createUserDto;
+    await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
         password: hash,
-        ...res,
+        email: email,
       }),
     );
+    return await this.userRepository.findOne({
+      where: { email },
+      select: { id: true, email: true },
+    });
   }
 
-  public findAll() {
-    return this.userRepository.find();
+  public findAll(): Promise<any> {
+    return this.userRepository.find({
+      where: {},
+      select: { id: true, email: true },
+    });
   }
 
-  public findOne(id: number) {
-    return this.userRepository.findOneBy({ id });
+  public findOne(id: number): Promise<any> {
+    return this.userRepository.findOne({
+      where: { id },
+      select: { id: true, email: true },
+    });
   }
 
-  public async update(id: number, user: UpdateUserDto) {
+  public async update(id: number, user: UpdateUserDto): Promise<any> {
     await this.userRepository.update(id, user);
     return user;
   }
 
-  public async remove(id: number) {
+  public async remove(id: number): Promise<any> {
     await this.userRepository.delete({ id });
+    return 'Пользователь удалён';
   }
 }
