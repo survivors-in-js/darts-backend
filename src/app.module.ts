@@ -7,8 +7,10 @@ import configs from './config/config';
 import { ParticipantsModule } from './resources/participants/participants.module';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-// import { join } from 'path';
 import * as path from 'path';
+import { UsersModule } from './resources/users/users.module';
+import { User } from './resources/users/entities/user.entity';
+import { Participant } from './resources/participants/entities/participant.entity';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import * as path from 'path';
       username: configs().database.username,
       password: configs().database.password,
       database: configs().database.databaseName,
-      entities: configs().database.entities,
+      entities: [User, Participant],
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
@@ -30,6 +32,7 @@ import * as path from 'path';
     }),
     ParticipantsModule,
     FilesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

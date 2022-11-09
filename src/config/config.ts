@@ -10,6 +10,5 @@ export default () => ({
     username: 'darts',
     password: 'darts',
     databaseName: 'darts',
-    entities: [Participant],
   },
 });
