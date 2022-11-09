@@ -1,1 +1,35 @@
-export class CreateParticipantDto {}
+export class CreateParticipantDto {
+  id: number;
+  surname: string;
+  name: string;
+  patronymic?: string;
+  dateOfBirth: Date;
+  gender: string;
+  address?: string;
+  email: string;
+  phone?: number;
+  seriesAndNumber?: number;
+  dateOfIssue?: Date;
+  issuedBy?: string;
+  divisionCode?: string;
+  snils?: string;
+  INN?: string;
+  subjectRF?: string;
+  category?: string;
+  аssigned?: Date;
+  nameOfTrainer?: string;
+  leadingHand?: string;
+  producerOfDart?: string;
+  weightOfDart?: number;
+  policyNumber?: number;
+  startOfAction?: Date;
+  endOfAction?: Date;
+  weightOfPlayer?: number;
+  heightOfPlayer?: number;
+  hobby?: string;
+  educationalInstitution?: string;
+  endOfEducation?: Date;
+  educationLevel?: string;
+  speciality?: string;
+  image?: string;
+}

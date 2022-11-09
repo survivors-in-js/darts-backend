@@ -4,6 +4,11 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import configs from './config/config';
+import { ParticipantsModule } from './resources/participants/participants.module';
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+// import { join } from 'path';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -14,12 +19,17 @@ import configs from './config/config';
       username: configs().database.username,
       password: configs().database.password,
       database: configs().database.databaseName,
-      entities: [],
+      entities: configs().database.entities,
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
     }),
     ConfigModule.forRoot({
       load: [configs],
     }),
+    ParticipantsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { Participant } from '../resources/participants/entities/participant.entity';
 dotenv.config();
 export default () => ({
   port: parseInt(process.env.PORT) || 3000,
@@ -9,5 +10,6 @@ export default () => ({
     username: 'darts',
     password: 'darts',
     databaseName: 'darts',
+    entities: [Participant],
   },
 });
