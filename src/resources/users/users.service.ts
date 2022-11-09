@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  [x: string]: any;
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -31,6 +32,13 @@ export class UsersService {
     return this.userRepository.find({
       where: {},
       select: { id: true, email: true },
+    });
+  }
+
+  public findWithOptions(options: { [key in any]: any }, conditions?: any) {
+    return this.userRepository.findOne({
+      where: options,
+      select: conditions,
     });
   }
 
