@@ -42,12 +42,27 @@ export class UsersService {
   }
 
   public async update(id: number, user: UpdateUserDto): Promise<any> {
-    await this.userRepository.update(id, user);
-    return user;
+    const { password, email } = user;
+    await bcrypt.hash(password, 10).then((hash) =>
+      this.userRepository.update(id, {
+        password: hash,
+        email: email,
+      }),
+    );
+    return await this.userRepository.findOne({
+      where: { email },
+      select: { id: true, email: true },
+    });
   }
 
   public async remove(id: number): Promise<any> {
     await this.userRepository.delete({ id });
     return 'Пользователь удалён';
+  }
+
+  public async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { email: email },
+    });
   }
 }

@@ -10,4 +10,5 @@ export default () => ({
     password: 'darts',
     databaseName: 'darts',
   },
+  jwtSecret: 'jwtSecret',
 });
