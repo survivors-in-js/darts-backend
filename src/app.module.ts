@@ -5,7 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailModule } from './emailsender/emailsender.module';
 import { ConfigModule } from '@nestjs/config';
 import configs from './config/config';
+<<<<<<< HEAD
 import { RecoverModule } from './recover/recover.module';
+=======
+import { UsersModule } from './resources/users/users.module';
+import { User } from './resources/users/entities/user.entity';
+>>>>>>> develop
 
 @Module({
   imports: [
@@ -18,12 +23,13 @@ import { RecoverModule } from './recover/recover.module';
       username: configs().database.username,
       password: configs().database.password,
       database: configs().database.databaseName,
-      entities: [],
+      entities: [User],
       synchronize: true,
     }),
     ConfigModule.forRoot({
       load: [configs],
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
