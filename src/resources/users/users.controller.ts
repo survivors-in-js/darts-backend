@@ -7,12 +7,17 @@ import {
   Param,
   Delete,
   NotFoundException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { EmailSender } from 'src/emailsender/emailsender.service';
 import { RestoreUserPasswordDto } from './dto/restore-user-password.dto';
+
+import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
+import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
@@ -48,7 +53,7 @@ export class UsersController {
   public remove(@Param('id') id: string): Promise<any> {
     return this.usersService.remove(parseInt(id));
   }
-
+  /// восстановление пароля
   @Post('password/restore')
   public async restore(
     @Body() restoreUserPasswordDto: RestoreUserPasswordDto,
@@ -72,5 +77,43 @@ export class UsersController {
     } catch (err) {
       return 'Произошла ошибка при обновлении данных';
     }
+  }
+
+  /// изменение пароля
+  ///пока здесь захардкожен юзер
+  @Post('password/change')
+  public async change(
+    @Body() changeUserPasswordDto: ChangeUserPasswordDto,
+  ): Promise<any> {
+    const { password, newPassword, newPasswordRepeat } = changeUserPasswordDto;
+    const user = {
+      id: 1,
+      email: 'trubacheff_91@mail.ru',
+      password: 't091jqof',
+    };
+    const matched = await bcrypt.compare(password, user.password);
+    if (!matched) {
+      return new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: `Введены неверные данные`,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (newPassword !== newPasswordRepeat) {
+      return new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: `Новый пароль введен с ошибкой`,
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    await this.usersService.update(user.id, {
+      password: newPassword,
+      email: user.email,
+    });
+    return 'Пароль успешно изменен';
   }
 }
