@@ -16,6 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/role.guard';
 import { UpdateAdminDto } from './dto/update-admin-dto';
+import { UpdateRoleDto } from './dto/update-role-dto';
 import Role from '../../config/role.enum';
 
 @Controller('users')
@@ -53,29 +54,33 @@ export class UsersController {
 
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtGuard, RolesGuard)
-  @Patch(':id/update')
+  @Patch(':id/role')
   public updateSuperAdmin(
     @Param('id') id: string,
-    @Body() updateUserDto: any,
+    @Body() updateUserDto: UpdateRoleDto,
   ): Promise<any> {
-    return this.usersService.update(parseInt(id), updateUserDto);
+    return this.usersService.updateRole(parseInt(id), updateUserDto);
   }
+  /* Пока под вопросом. Непонятно будет ли у 
+  администраторов возможность менять email и 
+  сбрасывать пароль у пользователей или нет.
+  */
+  /*
+  @Roles(Role.Admin, Role.SuperAdmin)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Patch(':id')
+  public updateAdmin(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateAdminDto,
+  ): Promise<any> {
+    return this.usersService.updateUser(parseInt(id), updateUserDto);
+  }*/
 
   @Roles(Role.SuperAdmin, Role.Admin)
   @UseGuards(JwtGuard, RolesGuard)
   @Get(':id')
   public findOne(@Param('id') id: string): Promise<any> {
     return this.usersService.findOne(parseInt(id));
-  }
-
-  @Roles(Role.Admin)
-  @UseGuards(JwtGuard, RolesGuard)
-  @Patch(':id')
-  public updateAdmin(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
-    return this.usersService.updateUser(parseInt(id), updateUserDto);
   }
 
   @Roles(Role.SuperAdmin, Role.Admin)
