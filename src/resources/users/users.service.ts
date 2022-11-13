@@ -36,7 +36,7 @@ export class UsersService {
       this.userRepository.save({
         password: hash,
         email: email,
-        role: Role.SuperAdmin,
+        role: Role.SUPER_ADMIN,
       }),
     );
     return await this.userRepository.findOne({
@@ -59,13 +59,6 @@ export class UsersService {
     });
   }
 
-  public findOneUser(id: number): Promise<any> {
-    return this.userRepository.findOne({
-      where: { id },
-      select: { id: true, email: true },
-    });
-  }
-
   public async updateUser(id: number, user: UpdateUserDto): Promise<any> {
     const { password, email } = user;
     await bcrypt.hash(password, 10).then((hash) =>
@@ -81,26 +74,29 @@ export class UsersService {
   }
 
   public async updateRole(id: number, user: UpdateRoleDto): Promise<any> {
-    const { role } = user;
-
+    const { role, ...res } = user;
     await this.userRepository.update(id, {
       role: role,
     });
-    return await this.userRepository.findOne({
-      where: { id },
-      select: { id: true, email: true, role: true },
-    });
+    return await this.findOne(id);
   }
 
   public async update(id: number, user: any): Promise<any> {
-    const { email, password } = user;
+    const { email, ...res } = user;
     await this.userRepository.update(id, {
       email: email,
     });
-    return await this.userRepository.findOne({
-      where: { id },
-      select: { id: true, email: true, role: true },
-    });
+    return await this.findOne(id);
+  }
+
+  public async resetPassword(id: number, user: any): Promise<any> {
+    const { password } = user;
+    await bcrypt.hash(password, 10).then((hash) =>
+      this.userRepository.update(id, {
+        password: hash,
+      }),
+    );
+    return await this.findOne(id);
   }
 
   public async remove(id: number): Promise<any> {

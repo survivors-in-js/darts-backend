@@ -6,11 +6,11 @@ import {
   Body,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../resources/users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { CreateAdminDto } from '../users/dto/create-admin.dto';
+import { CreateUserDto } from '../resources/users/dto/create-user.dto';
+import { CreateAdminDto } from '../resources/users/dto/create-admin.dto';
 
 @Controller('')
 export class AuthController {
