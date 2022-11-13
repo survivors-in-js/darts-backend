@@ -31,5 +31,4 @@ export class CreateParticipantDto {
   endOfEducation?: Date;
   educationLevel?: string;
   speciality?: string;
-  image?: string;
 }

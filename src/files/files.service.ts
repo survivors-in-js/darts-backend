@@ -5,16 +5,16 @@ import * as uuid from 'uuid';
 
 @Injectable()
 export class FilesService {
-  async createFile(file): Promise<string> {
+  public async createFile(file: Express.Multer.File): Promise<string> {
     try {
-      const fileName =
+      const fileNameUuid =
         uuid.v4() + '.' + file.originalname.match(/\.([^.]+)$/)?.[1];
       const filePath = path.resolve(__dirname, '..', 'static');
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath, { recursive: true });
       }
-      fs.writeFileSync(path.join(filePath, fileName), file.buffer);
-      return fileName;
+      fs.writeFileSync(path.join(filePath, fileNameUuid), file.buffer);
+      return fileNameUuid;
     } catch (error) {
       throw new HttpException(
         'Произошла ошибка при записи файла',
@@ -23,11 +23,11 @@ export class FilesService {
     }
   }
 
-  async deleteFile(fileName): Promise<string> {
+  public async deleteFile(fileNameUuid: string): Promise<string> {
     try {
       const filePath = path.resolve(__dirname, '..', 'static');
 
-      fs.rmSync(path.join(filePath, fileName));
+      fs.rmSync(path.join(filePath, fileNameUuid));
       return 'файл удален';
     } catch (error) {
       throw new HttpException(

@@ -24,39 +24,42 @@ export class ParticipantsController {
   constructor(private readonly participantsService: ParticipantsService) {}
 
   @Post()
+  public create(@Body() createParticipantDto: CreateParticipantDto) {
+    return this.participantsService.create(createParticipantDto);
+  }
+
+  @Post(':id/upload-file')
   @UseInterceptors(FileInterceptor('image'))
-  create(
-    @Body() createParticipantDto: CreateParticipantDto,
+  public uploadFile(
+    @Param('id') id: string,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
           // TODO узнать какой макс размер
-          // TODO разобраться с логикой добавления/удаления фото.
           new MaxFileSizeValidator({ maxSize: 10000000 }),
           new FileTypeValidator({ fileType: /(jpg|jpeg|png|gif)$/ }),
         ],
       }),
     )
-    image,
+    image: Express.Multer.File,
   ) {
-    return this.participantsService.create(createParticipantDto, image);
+    return this.participantsService.uploadFile(+id, image);
   }
 
   @Get()
-  findAll() {
+  public findAll() {
     return this.participantsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  public findOne(@Param('id') id: string) {
     return this.participantsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(':id/upload-file')
   @UseInterceptors(FileInterceptor('image'))
-  update(
+  public updateFile(
     @Param('id') id: string,
-    @Body() updateParticipantDto: UpdateParticipantDto,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -66,13 +69,21 @@ export class ParticipantsController {
         ],
       }),
     )
-    image,
+    image: Express.Multer.File,
   ) {
-    return this.participantsService.update(+id, updateParticipantDto, image);
+    return this.participantsService.uploadFile(+id, image);
+  }
+
+  @Patch(':id')
+  public update(
+    @Param('id') id: string,
+    @Body() updateParticipantDto: UpdateParticipantDto,
+  ) {
+    return this.participantsService.update(+id, updateParticipantDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  public remove(@Param('id') id: string) {
     return this.participantsService.remove(+id);
   }
 }

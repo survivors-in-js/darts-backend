@@ -14,68 +14,52 @@ export class ParticipantsService {
     private filesService: FilesService,
   ) {}
 
-  async create(
+  public async create(
     createParticipantDto: CreateParticipantDto,
-    image: any,
   ): Promise<Participant> {
-    let participant: Participant;
-    const { email } = createParticipantDto;
-    const findedParticipant = await this.participantsRepository.findOneBy({
-      email,
+    const participant = await this.participantsRepository.create({
+      ...createParticipantDto,
     });
-
-    if (image && !findedParticipant) {
-      const fileName = await this.filesService.createFile(image);
-
-      participant = await this.participantsRepository.create({
-        ...createParticipantDto,
-        image: fileName,
-      });
-    } else {
-      participant = await this.participantsRepository.create({
-        ...createParticipantDto,
-      });
-    }
 
     return this.participantsRepository.save(participant);
   }
 
-  findAll() {
+  public async findAll() {
     return this.participantsRepository.find();
   }
 
-  async findOne(id: number): Promise<Participant> {
+  public async findOne(id: number): Promise<Participant> {
     return this.participantsRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateParticipantDto: UpdateParticipantDto, image) {
-    let participant: Participant;
-    if (image) {
-      const findedParticipant = await this.participantsRepository.findOneBy({
-        id,
-      });
-      const imageName = findedParticipant.image;
-
-      if (imageName) {
-        await this.filesService.deleteFile(imageName);
-      }
-
-      const fileName = await this.filesService.createFile(image);
-
-      participant = await this.participantsRepository.create({
-        ...updateParticipantDto,
-        image: fileName,
-      });
-    } else {
-      participant = await this.participantsRepository.create({
-        ...updateParticipantDto,
-      });
-    }
-
-    return this.participantsRepository.update({ id }, participant);
+  public async update(id: number, updateParticipantDto: UpdateParticipantDto) {
+    return this.participantsRepository.update({ id }, updateParticipantDto);
   }
 
-  async remove(id: number): Promise<void> {
+  public async uploadFile(id: number, image: Express.Multer.File) {
+    const foundParticipant = await this.participantsRepository.findOneBy({
+      id,
+    });
+
+    console.log(foundParticipant);
+
+    const imageName = foundParticipant.image;
+
+    if (imageName) {
+      await this.filesService.deleteFile(imageName);
+    }
+
+    const fileName = await this.filesService.createFile(image);
+
+    return this.participantsRepository.update(
+      { id },
+      {
+        image: fileName,
+      },
+    );
+  }
+
+  public async remove(id: number): Promise<void> {
     await this.participantsRepository.delete({ id });
   }
 }
