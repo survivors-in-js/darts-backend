@@ -10,5 +10,6 @@ export default () => ({
     password: 'darts',
     databaseName: 'darts',
   },
+  emailSuperAdmin: 'superAdmin@test.ru',
   jwtSecret: 'jwtSecret',
 });

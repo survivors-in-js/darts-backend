@@ -10,6 +10,7 @@ import { UsersService } from '../resources/users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
+import configs from '../config/config';
 
 @Controller('')
 export class AuthController {
@@ -33,7 +34,7 @@ export class AuthController {
 
   @Post('addAdmin')
   async addAdmin(@Body() createUserDto: CreateUserDto) {
-    if (createUserDto.email === 'superAdmin@test.ru') {
+    if (createUserDto.email === configs().emailSuperAdmin) {
       const user = await this.usersService.createAdmin(createUserDto);
       return this.authService.auth(user);
     } else throw new UnauthorizedException('Неправильно');
