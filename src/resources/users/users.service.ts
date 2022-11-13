@@ -5,8 +5,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import Role from '../../config/role.enum';
-import { UpdateAdminDto } from './dto/update-admin-dto';
-import { UpdateRoleDto } from './dto/update-role-dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -24,10 +22,7 @@ export class UsersService {
         email: email,
       }),
     );
-    return await this.userRepository.findOne({
-      where: { email },
-      select: { id: true, email: true },
-    });
+    return await this.findByEmail(email);
   }
 
   public async createAdmin(createUserDto: CreateUserDto): Promise<any> {
@@ -39,10 +34,7 @@ export class UsersService {
         role: Role.SUPER_ADMIN,
       }),
     );
-    return await this.userRepository.findOne({
-      where: { email },
-      select: { id: true, email: true },
-    });
+    return await this.findByEmail(email);
   }
 
   public findAll(): Promise<any> {
@@ -73,7 +65,7 @@ export class UsersService {
     });
   }
 
-  public async updateRole(id: number, user: UpdateRoleDto): Promise<any> {
+  public async updateRole(id: number, user: UpdateUserDto): Promise<any> {
     const { role, ...res } = user;
     await this.userRepository.update(id, {
       role: role,
@@ -81,7 +73,7 @@ export class UsersService {
     return await this.findOne(id);
   }
 
-  public async update(id: number, user: any): Promise<any> {
+  public async update(id: number, user: UpdateUserDto): Promise<any> {
     const { email, ...res } = user;
     await this.userRepository.update(id, {
       email: email,
@@ -89,7 +81,7 @@ export class UsersService {
     return await this.findOne(id);
   }
 
-  public async resetPassword(id: number, user: any): Promise<any> {
+  public async resetPassword(id: number, user: UpdateUserDto): Promise<any> {
     const { password } = user;
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.update(id, {

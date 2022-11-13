@@ -16,8 +16,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from '../../auth/guards/jwt.guard';
 import { RolesGuard } from '../../auth/guards/role.guard';
-import { UpdateAdminDto } from './dto/update-admin-dto';
-import { UpdateRoleDto } from './dto/update-role-dto';
 import Role from '../../config/role.enum';
 
 @Controller('users')
@@ -29,6 +27,13 @@ export class UsersController {
   @Get()
   public findAll(): Promise<any> {
     return this.usersService.findAll();
+  }
+
+  @Roles(Role.SUPER_ADMIN)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Post()
+  async signup(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
   @UseGuards(JwtGuard)
@@ -51,17 +56,17 @@ export class UsersController {
   @Patch(':id/role')
   public updateSuperAdmin(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateRoleDto,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
     return this.usersService.updateRole(parseInt(id), updateUserDto);
   }
 
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
-  @Patch(':id/udate-password')
+  @Patch(':id/update-password')
   public async resetPassword(
     @Param('id') id: string,
-    @Body() updateUserDto: any,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
     const userBase = await this.findOne(id);
     if (userBase.role !== Role.SUPER_ADMIN) {
@@ -77,7 +82,7 @@ export class UsersController {
   @Patch(':id')
   public updateAdmin(
     @Param('id') id: string,
-    @Body() updateUserDto: any,
+    @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
     return this.usersService.updateUser(parseInt(id), updateUserDto);
   }

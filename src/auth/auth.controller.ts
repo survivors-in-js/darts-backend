@@ -10,7 +10,6 @@ import { UsersService } from '../resources/users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { CreateUserDto } from '../resources/users/dto/create-user.dto';
-import { CreateAdminDto } from '../resources/users/dto/create-admin.dto';
 
 @Controller('')
 export class AuthController {
@@ -33,7 +32,7 @@ export class AuthController {
   }
 
   @Post('addAdmin')
-  async addAdmin(@Body() createUserDto: CreateAdminDto) {
+  async addAdmin(@Body() createUserDto: CreateUserDto) {
     if (createUserDto.email === 'superAdmin@test.ru') {
       const user = await this.usersService.createAdmin(createUserDto);
       return this.authService.auth(user);
