@@ -6,26 +6,31 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import Role from '../../config/role.enum';
 import * as bcrypt from 'bcrypt';
+import RoleEnum from '../../config/role.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  public async create(createUserDto: CreateUserDto): Promise<any> {
-    const { password, email } = createUserDto;
+  public async create(
+    createUserDto: CreateUserDto,
+    isCreatingBySuperAdmin = false,
+  ): Promise<User> {
+    const { password, email, role } = createUserDto;
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
         password: hash,
         email: email,
+        role: isCreatingBySuperAdmin && role ? role : RoleEnum.SIMPLE_USER,
       }),
     );
     return await this.findByEmail(email);
   }
 
-  public async createAdmin(createUserDto: CreateUserDto): Promise<any> {
+  public async createSuperAdmin(createUserDto: CreateUserDto): Promise<User> {
     const { password, email } = createUserDto;
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
@@ -37,35 +42,42 @@ export class UsersService {
     return await this.findByEmail(email);
   }
 
-  public findAll(): Promise<any> {
+  public findAll(): Promise<User[]> {
     return this.userRepository.find({
       where: {},
       select: { id: true, email: true, role: true },
     });
   }
 
-  public findOne(id: number): Promise<any> {
+  public findOne(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id },
       select: { id: true, email: true, role: true },
     });
   }
 
-  public async updateUser(id: number, user: UpdateUserDto): Promise<any> {
-    const { password, email } = user;
-    await bcrypt.hash(password, 10).then((hash) =>
+  public async updateUser(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    const { password } = updateUserDto;
+    if (password) {
+      const passwordHash = await bcrypt.hash(password, 10).then((hash) => hash);
       this.userRepository.update(id, {
-        password: hash,
-        email: email,
-      }),
-    );
+        ...updateUserDto,
+        password: passwordHash,
+      });
+    } else {
+      this.userRepository.update(id, updateUserDto);
+    }
+
     return await this.userRepository.findOne({
-      where: { email },
+      where: { id },
       select: { id: true, email: true },
     });
   }
 
-  public async updateRole(id: number, user: UpdateUserDto): Promise<any> {
+  public async updateRole(id: number, user: UpdateUserDto): Promise<User> {
     const { role, ...res } = user;
     await this.userRepository.update(id, {
       role: role,
@@ -73,15 +85,8 @@ export class UsersService {
     return await this.findOne(id);
   }
 
-  public async update(id: number, user: UpdateUserDto): Promise<any> {
-    const { email, ...res } = user;
-    await this.userRepository.update(id, {
-      email: email,
-    });
-    return await this.findOne(id);
-  }
-
-  public async resetPassword(id: number, user: UpdateUserDto): Promise<any> {
+  // гоша твой выход. твой тикет. делай што хочешь
+  public async resetPassword(id: number, user: UpdateUserDto): Promise<User> {
     const { password } = user;
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.update(id, {

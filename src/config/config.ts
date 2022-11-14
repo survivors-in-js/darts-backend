@@ -10,6 +10,6 @@ export default () => ({
     password: 'darts',
     databaseName: 'darts',
   },
-  emailSuperAdmin: 'superAdmin@test.ru',
+  emailSuperAdmin: process.env.SUPER_ADMIN_EMAIL || 'superadmin@test.ru',
   jwtSecret: 'jwtSecret',
 });

@@ -15,28 +15,34 @@ import configs from '../config/config';
 @Controller('')
 export class AuthController {
   constructor(
-    private usersService: UsersService,
-    private authService: AuthService,
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
   ) {}
 
   @UseGuards(LocalGuard)
   @Post('signin')
-  async signin(@Req() req) {
-    return await this.authService.auth(req.user);
+  public signin(@Req() req): { access_token: string } {
+    return this.authService.auth(req.user);
   }
 
   @Post('signup')
-  async signup(@Body() createUserDto: CreateUserDto) {
+  public async signup(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ access_token: string }> {
     const user = await this.usersService.create(createUserDto);
 
     return this.authService.auth(user);
   }
 
-  @Post('addAdmin')
-  async addAdmin(@Body() createUserDto: CreateUserDto) {
+  // супер админ создается по конкретному емаил. тянется из env переменной SUPER_ADMIN_USER. дефолтный superadmin@test.ru
+  @Post('add-super-admin')
+  public async addSuperAdmin(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ access_token: string }> {
     if (createUserDto.email === configs().emailSuperAdmin) {
-      const user = await this.usersService.createAdmin(createUserDto);
+      const user = await this.usersService.createSuperAdmin(createUserDto);
       return this.authService.auth(user);
-    } else throw new UnauthorizedException('Неправильно');
+    }
+    throw new UnauthorizedException('Неправильно');
   }
 }

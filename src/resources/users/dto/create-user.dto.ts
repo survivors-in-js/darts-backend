@@ -2,10 +2,10 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 import Role from '../../../config/role.enum';
 export class CreateUserDto {
   @IsEmail()
-  email: string;
+  public email: string;
 
   @IsNotEmpty()
-  password: string;
+  public password: string;
 
-  role: Role;
+  public role: Role;
 }

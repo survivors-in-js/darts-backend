@@ -17,6 +17,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from '../../auth/guards/jwt.guard';
 import { RolesGuard } from '../../auth/guards/role.guard';
 import Role from '../../config/role.enum';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -25,15 +26,15 @@ export class UsersController {
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get()
-  public findAll(): Promise<any> {
+  public findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Roles(Role.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Post()
-  async signup(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  public async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserDto, true);
   }
 
   @UseGuards(JwtGuard)
@@ -41,26 +42,27 @@ export class UsersController {
   public updateUser(
     @Req() req,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
+  ): Promise<User> {
     return this.usersService.updateUser(req.user.id, updateUserDto);
   }
 
   @UseGuards(JwtGuard)
   @Get('me')
-  public getUser(@Req() req): Promise<any> {
+  public getUser(@Req() req): Promise<User> {
     return this.usersService.findOne(parseInt(req.user.id));
   }
 
   @Roles(Role.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id/role')
-  public updateSuperAdmin(
+  public updateUserRoleBySuperAdmin(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
     return this.usersService.updateRole(parseInt(id), updateUserDto);
   }
 
+  // гоша твой выход. твой тикет. делай што хочешь
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id/update-password')
@@ -83,14 +85,14 @@ export class UsersController {
   public updateAdmin(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
+  ): Promise<User> {
     return this.usersService.updateUser(parseInt(id), updateUserDto);
   }
 
   @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get(':id')
-  public findOne(@Param('id') id: string): Promise<any> {
+  public findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(parseInt(id));
   }
 
