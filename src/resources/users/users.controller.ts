@@ -144,18 +144,14 @@ export class UsersController {
   }
 
   /// изменение пароля
-  ///пока здесь захардкожен юзер
+  @UseGuards(JwtGuard)
   @Post('password/change')
   public async change(
     @Body() changeUserPasswordDto: ChangeUserPasswordDto,
+    @Req() req,
   ): Promise<any> {
     const { password, newPassword, newPasswordRepeat } = changeUserPasswordDto;
-    const user = {
-      id: 1,
-      email: 'trubacheff_91@mail.ru',
-      password: 't091jqof',
-    };
-    const matched = await bcrypt.compare(password, user.password);
+    const matched = await bcrypt.compare(password, req.user.password);
     if (!matched) {
       return new HttpException(
         {
@@ -174,9 +170,9 @@ export class UsersController {
         HttpStatus.CONFLICT,
       );
     }
-    await this.usersService.update(user.id, {
+    await this.usersService.update(req.user.id, {
       password: newPassword,
-      email: user.email,
+      email: req.user.email,
     });
     return 'Пароль успешно изменен';
   }
