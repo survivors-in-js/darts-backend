@@ -32,31 +32,35 @@ export class ParticipantsService {
     return this.participantsRepository.findOneBy({ id });
   }
 
-  public async update(id: number, updateParticipantDto: UpdateParticipantDto) {
-    return this.participantsRepository.update({ id }, updateParticipantDto);
+  public async update(
+    id: number,
+    updateParticipantDto: UpdateParticipantDto,
+  ): Promise<Participant> {
+    await this.participantsRepository.update({ id }, updateParticipantDto);
+    return this.findOne(id);
   }
 
-  public async uploadFile(id: number, image: Express.Multer.File) {
+  public async uploadFile(
+    id: number,
+    image: Express.Multer.File,
+  ): Promise<{ fileNameUuid: string }> {
     const foundParticipant = await this.participantsRepository.findOneBy({
       id,
     });
 
-    console.log(foundParticipant);
-
-    const imageName = foundParticipant.image;
-
-    if (imageName) {
-      await this.filesService.deleteFile(imageName);
+    if (foundParticipant.image) {
+      await this.filesService.deleteFile(foundParticipant.image);
     }
 
-    const fileName = await this.filesService.createFile(image);
+    const fileNameUuid = await this.filesService.createFile(image);
 
-    return this.participantsRepository.update(
+    await this.participantsRepository.update(
       { id },
       {
-        image: fileName,
+        image: fileNameUuid,
       },
     );
+    return { fileNameUuid };
   }
 
   public async remove(id: number): Promise<void> {

@@ -16,140 +16,140 @@ export class Participant {
   @IsInt()
   @Min(0)
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column()
   @IsNotEmpty()
   @IsString()
-  surname: string;
+  public surname: string;
 
   @Column()
   @IsNotEmpty()
   @IsString()
-  name: string;
+  public name: string;
 
   @Column({ nullable: true })
   @IsString()
-  patronymic: string;
+  public patronymic: string;
 
   @Column()
   @IsNotEmpty()
   @IsDate()
-  dateOfBirth: Date;
+  public dateOfBirth: Date;
 
   @Column()
   @IsNotEmpty()
   @IsString()
-  gender: string;
+  public gender: string;
 
   @Column({ nullable: true })
   @IsString()
-  address: string;
+  public address: string;
 
   @Column({ unique: true })
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  email: string;
+  public email: string;
 
   @Column({ nullable: true })
   @IsInt()
-  phone: number;
+  public phone: number;
 
   @Column({ nullable: true })
   @IsInt()
   @Length(10)
-  seriesAndNumber: number;
+  public seriesAndNumber: number;
 
   @Column({ nullable: true })
   @IsDate()
-  dateOfIssue: Date;
+  public dateOfIssue: Date;
 
   @Column({ nullable: true })
   @IsString()
-  issuedBy: string;
+  public issuedBy: string;
 
   @Column({ nullable: true })
-  divisionCode: string;
+  public divisionCode: string;
 
   @Column({ nullable: true })
   @IsString()
-  snils: string;
+  public snils: string;
 
   @Column({ nullable: true })
   @IsString()
   @Length(12)
-  INN: string;
+  public INN: string;
 
   @Column({ nullable: true })
   @IsString()
-  subjectRF: string;
+  public subjectRF: string;
 
   @Column({ nullable: true })
   @IsString()
-  category: string;
+  public category: string;
 
   @Column({ nullable: true })
   @IsDate()
-  аssigned: Date;
+  public аssigned: Date;
 
   @Column({ nullable: true })
   @IsString()
-  nameOfTrainer: string;
+  public nameOfTrainer: string;
 
   @Column({ nullable: true })
   @IsString()
-  leadingHand: string;
+  public leadingHand: string;
 
   @Column({ nullable: true })
   @IsString()
-  producerOfDart: string;
+  public producerOfDart: string;
 
   @Column({ nullable: true })
   @IsInt()
-  weightOfDart: number;
+  public weightOfDart: number;
 
   @Column({ nullable: true })
   @IsInt()
   @IsOptional()
-  policyNumber: number;
+  public policyNumber: number;
 
   @Column({ nullable: true })
   @IsDate()
-  startOfAction: Date;
+  public startOfAction: Date;
 
   @Column({ nullable: true })
   @IsDate()
-  endOfAction: Date;
+  public endOfAction: Date;
 
   @Column({ nullable: true })
   @IsInt()
-  weightOfPlayer: number;
+  public weightOfPlayer: number;
 
   @Column({ nullable: true })
   @IsInt()
-  heightOfPlayer: number;
+  public heightOfPlayer: number;
 
   @Column({ nullable: true })
   @IsString()
-  hobby: string;
+  public hobby: string;
 
   @Column({ nullable: true })
   @IsString()
-  educationalInstitution: string;
+  public educationalInstitution: string;
 
   @Column({ nullable: true })
   @IsDate()
-  endOfEducation: Date;
+  public endOfEducation: Date;
 
   @Column({ nullable: true })
   @IsString()
-  educationLevel: string;
+  public educationLevel: string;
 
   @Column({ nullable: true })
   @IsString()
-  speciality: string;
+  public speciality: string;
 
   @Column({ nullable: true })
-  image: string;
+  public image: string;
 }

@@ -16,15 +16,16 @@ import { ParticipantsService } from './participants.service';
 import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-
-console.log(FileTypeValidator);
+import { Participant } from './entities/participant.entity';
 
 @Controller('participants')
 export class ParticipantsController {
   constructor(private readonly participantsService: ParticipantsService) {}
 
   @Post()
-  public create(@Body() createParticipantDto: CreateParticipantDto) {
+  public create(
+    @Body() createParticipantDto: CreateParticipantDto,
+  ): Promise<Participant> {
     return this.participantsService.create(createParticipantDto);
   }
 
@@ -35,55 +36,36 @@ export class ParticipantsController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          // TODO узнать какой макс размер
           new MaxFileSizeValidator({ maxSize: 10000000 }),
           new FileTypeValidator({ fileType: /(jpg|jpeg|png|gif)$/ }),
         ],
       }),
     )
     image: Express.Multer.File,
-  ) {
-    return this.participantsService.uploadFile(+id, image);
+  ): Promise<{ fileNameUuid: string }> {
+    return this.participantsService.uploadFile(parseInt(id), image);
   }
 
   @Get()
-  public findAll() {
+  public findAll(): Promise<Participant[]> {
     return this.participantsService.findAll();
   }
 
   @Get(':id')
-  public findOne(@Param('id') id: string) {
-    return this.participantsService.findOne(+id);
-  }
-
-  @Patch(':id/upload-file')
-  @UseInterceptors(FileInterceptor('image'))
-  public updateFile(
-    @Param('id') id: string,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          // TODO узнать какой макс размер
-          new MaxFileSizeValidator({ maxSize: 10000000 }),
-          new FileTypeValidator({ fileType: /(jpg|jpeg|png|gif)$/ }),
-        ],
-      }),
-    )
-    image: Express.Multer.File,
-  ) {
-    return this.participantsService.uploadFile(+id, image);
+  public findOne(@Param('id') id: string): Promise<Participant> {
+    return this.participantsService.findOne(parseInt(id));
   }
 
   @Patch(':id')
   public update(
     @Param('id') id: string,
     @Body() updateParticipantDto: UpdateParticipantDto,
-  ) {
-    return this.participantsService.update(+id, updateParticipantDto);
+  ): Promise<Participant> {
+    return this.participantsService.update(parseInt(id), updateParticipantDto);
   }
 
   @Delete(':id')
-  public remove(@Param('id') id: string) {
-    return this.participantsService.remove(+id);
+  public remove(@Param('id') id: string): Promise<void> {
+    return this.participantsService.remove(parseInt(id));
   }
 }
