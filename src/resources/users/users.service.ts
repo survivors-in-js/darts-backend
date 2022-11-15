@@ -4,9 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import Role from '../../config/role.enum';
 import * as bcrypt from 'bcrypt';
-import RoleEnum from '../../config/role.enum';
+import { RoleEnum } from 'src/config/role.enum';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +23,7 @@ export class UsersService {
       this.userRepository.save({
         password: hash,
         email: email,
-        role: isCreatingBySuperAdmin && role ? role : RoleEnum.SIMPLE_USER,
+        role: isCreatingBySuperAdmin && role ? role : RoleEnum.USER,
       }),
     );
     return await this.findByEmail(email);
@@ -36,7 +35,7 @@ export class UsersService {
       this.userRepository.save({
         password: hash,
         email: email,
-        role: Role.SUPER_ADMIN,
+        role: RoleEnum.SUPER_ADMIN,
       }),
     );
     return await this.findByEmail(email);
