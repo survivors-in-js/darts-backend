@@ -11,6 +11,7 @@ import * as path from 'path';
 import { UsersModule } from './resources/users/users.module';
 import { User } from './resources/users/entities/user.entity';
 import { Participant } from './resources/participants/entities/participant.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Participant } from './resources/participants/entities/participant.entit
     ParticipantsModule,
     FilesModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
