@@ -1,6 +1,7 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 import { IsEmail } from 'class-validator';
-import Role from '../../../config/role.enum';
+import { RoleEnum } from 'src/config/role.enum';
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -16,9 +17,9 @@ export class User {
   public password: string;
 
   @Column({
-    default: Role.SIMPLE_USER,
+    default: RoleEnum.USER,
     type: 'enum',
-    enum: Role,
+    enum: RoleEnum,
   })
-  public role: Role;
+  public role: RoleEnum;
 }

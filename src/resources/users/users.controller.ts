@@ -25,9 +25,9 @@ import { RestoreUserPasswordDto } from './dto/restore-user-password.dto';
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtGuard } from '../../auth/guards/jwt.guard';
-import { RolesGuard } from '../../auth/guards/role.guard';
-import Role from '../../config/role.enum';
 import { User } from './entities/user.entity';
+import { RolesGuard } from 'src/auth/guards/role.guard';
+import { RoleEnum } from 'src/config/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -36,14 +36,14 @@ export class UsersController {
     private readonly emailService: EmailSender,
   ) {}
 
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get()
   public findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
-  @Roles(Role.SUPER_ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Post()
   public async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -65,7 +65,7 @@ export class UsersController {
     return this.usersService.findOne(parseInt(req.user.id));
   }
 
-  @Roles(Role.SUPER_ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id/role')
   public updateUserRoleBySuperAdmin(
@@ -76,7 +76,7 @@ export class UsersController {
   }
 
   // гоша твой выход. твой тикет. делай што хочешь
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id/update-password')
   public async resetPassword(
@@ -84,7 +84,7 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<any> {
     const userBase = await this.findOne(id);
-    if (userBase.role !== Role.SUPER_ADMIN) {
+    if (userBase.role !== RoleEnum.SUPER_ADMIN) {
       return this.usersService.resetPassword(parseInt(id), updateUserDto);
     } else
       throw new UnauthorizedException(
@@ -92,7 +92,7 @@ export class UsersController {
       );
   }
 
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id')
   public updateAdmin(
@@ -102,19 +102,19 @@ export class UsersController {
     return this.usersService.updateUser(parseInt(id), updateUserDto);
   }
 
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get(':id')
   public findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(parseInt(id));
   }
 
-  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Delete(':id')
   public async remove(@Param('id') id: string): Promise<any> {
     const userBase = await this.findOne(id);
-    if (userBase.role !== Role.SUPER_ADMIN) {
+    if (userBase.role !== RoleEnum.SUPER_ADMIN) {
       return this.usersService.remove(parseInt(id));
     } else
       throw new UnauthorizedException('Нельзя удалить Супер-Администратора');
