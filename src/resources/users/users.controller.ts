@@ -12,6 +12,8 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
+  ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { Roles } from '../../auth/roles.decorator';
 import { UsersService } from './users.service';
@@ -118,13 +120,13 @@ export class UsersController {
       throw new UnauthorizedException('Нельзя удалить Супер-Администратора');
   }
   /// восстановление пароля
-  @Post('password/restore')
+  @Post('/forget-password')
   public async restore(
     @Body() restoreUserPasswordDto: RestoreUserPasswordDto,
   ): Promise<string> {
     const { email } = restoreUserPasswordDto;
     const user = await this.usersService.findWithOptions(
-      { email: email },
+      { email },
       { id: true, email: true },
     );
     if (!user) {
@@ -132,7 +134,7 @@ export class UsersController {
     }
     const newPassword = Math.random().toString(36).slice(-8);
     try {
-      await this.usersService.update(user.id, {
+      await this.usersService.updateUser(user.id, {
         password: newPassword,
         email: email,
       });
@@ -145,32 +147,23 @@ export class UsersController {
 
   /// изменение пароля
   @UseGuards(JwtGuard)
-  @Post('password/change')
+  @Post('/change-password')
   public async change(
     @Body() changeUserPasswordDto: ChangeUserPasswordDto,
     @Req() req,
   ): Promise<any> {
     const { password, newPassword, newPasswordRepeat } = changeUserPasswordDto;
-    const matched = await bcrypt.compare(password, req.user.password);
+    const user = await this.usersService.findWithOptions({
+      email: req.user.email,
+    });
+    const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      return new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: `Введены неверные данные`,
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      throw new ForbiddenException('Введены неверные данные');
     }
     if (newPassword !== newPasswordRepeat) {
-      return new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          error: `Новый пароль введен с ошибкой`,
-        },
-        HttpStatus.CONFLICT,
-      );
+      throw new ConflictException('Новый пароль введен с ошибкой');
     }
-    await this.usersService.update(req.user.id, {
+    await this.usersService.updateUser(req.user.id, {
       password: newPassword,
       email: req.user.email,
     });

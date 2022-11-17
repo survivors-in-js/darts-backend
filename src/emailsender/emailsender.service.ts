@@ -15,7 +15,7 @@ export class EmailSender {
     },
   });
 
-  sendemail(email: string, text: string) {
+  public async sendemail(email: string, text: string): Promise<void> {
     const mailOptions = {
       from: 'darts.club2022@gmail.com',
       to: email,

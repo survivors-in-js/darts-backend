@@ -10,7 +10,6 @@ import RoleEnum from '../../config/role.enum';
 
 @Injectable()
 export class UsersService {
-  [x: string]: any;
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -50,14 +49,16 @@ export class UsersService {
     });
   }
 
-  public findWithOptions(options: { [key in any]: any }, conditions?: any) {
+  public async findWithOptions(
+    options: { [key: string]: any },
+    conditions?: any,
+  ): Promise<User> {
     return this.userRepository.findOne({
       where: options,
       select: conditions,
     });
   }
 
-  
   public findOne(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id },

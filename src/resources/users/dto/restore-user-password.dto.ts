@@ -4,5 +4,5 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class RestoreUserPasswordDto extends PartialType(CreateUserDto) {
   @IsEmail()
-  email: string;
+  public email: string;
 }
