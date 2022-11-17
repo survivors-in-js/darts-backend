@@ -7,8 +7,6 @@ import {
   Param,
   Delete,
   NotFoundException,
-  HttpException,
-  HttpStatus,
   UseGuards,
   Req,
   UnauthorizedException,
@@ -119,6 +117,7 @@ export class UsersController {
     } else
       throw new UnauthorizedException('Нельзя удалить Супер-Администратора');
   }
+
   /// восстановление пароля
   @Post('/forget-password')
   public async restore(
@@ -151,7 +150,7 @@ export class UsersController {
   public async change(
     @Body() changeUserPasswordDto: ChangeUserPasswordDto,
     @Req() req,
-  ): Promise<any> {
+  ): Promise<string> {
     const { password, newPassword, newPasswordRepeat } = changeUserPasswordDto;
     const user = await this.usersService.findWithOptions({
       email: req.user.email,
