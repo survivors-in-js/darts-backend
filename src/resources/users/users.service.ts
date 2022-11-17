@@ -48,6 +48,16 @@ export class UsersService {
     });
   }
 
+  public async findWithOptions(
+    options: { [key: string]: any },
+    conditions?: any,
+  ): Promise<User> {
+    return this.userRepository.findOne({
+      where: options,
+      select: conditions,
+    });
+  }
+
   public findOne(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id },

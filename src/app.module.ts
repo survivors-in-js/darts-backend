@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmailModule } from './emailsender/emailsender.module';
 import { ConfigModule } from '@nestjs/config';
 import configs from './config/config';
 import { ParticipantsModule } from './resources/participants/participants.module';
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    EmailModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: configs().database.host,
