@@ -34,7 +34,7 @@ export class UsersController {
     private readonly emailService: EmailSender,
   ) {}
 
-  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get()
   public findAll(): Promise<User[]> {
@@ -45,7 +45,7 @@ export class UsersController {
   @UseGuards(JwtGuard, RolesGuard)
   @Post()
   public async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto, true);
+    return this.usersService.create(createUserDto);
   }
 
   @UseGuards(JwtGuard)
@@ -63,34 +63,8 @@ export class UsersController {
     return this.usersService.findOne(parseInt(req.user.id));
   }
 
-  @Roles(RoleEnum.SUPER_ADMIN)
-  @UseGuards(JwtGuard, RolesGuard)
-  @Patch(':id/role')
-  public updateUserRoleBySuperAdmin(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
-    return this.usersService.updateRole(parseInt(id), updateUserDto);
-  }
-
   // гоша твой выход. твой тикет. делай што хочешь
-  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
-  @UseGuards(JwtGuard, RolesGuard)
-  @Patch(':id/update-password')
-  public async resetPassword(
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
-    const userBase = await this.findOne(id);
-    if (userBase.role !== RoleEnum.SUPER_ADMIN) {
-      return this.usersService.resetPassword(parseInt(id), updateUserDto);
-    } else
-      throw new UnauthorizedException(
-        'Нельзя изменить пароль обратитесь к системному администратору',
-      );
-  }
-
-  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id')
   public updateAdmin(
@@ -100,14 +74,14 @@ export class UsersController {
     return this.usersService.updateUser(parseInt(id), updateUserDto);
   }
 
-  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Get(':id')
   public findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(parseInt(id));
   }
 
-  @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
+  @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Delete(':id')
   public async remove(@Param('id') id: string): Promise<any> {
