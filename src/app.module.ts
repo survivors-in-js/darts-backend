@@ -14,6 +14,7 @@ import { User } from './resources/users/entities/user.entity';
 import { Participant } from './resources/participants/entities/participant.entity';
 import { AuthModule } from './auth/auth.module';
 import { Event } from './resources/events/entities/event.entity';
+import { EventsModule } from './resources/events/events.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { Event } from './resources/events/entities/event.entity';
     FilesModule,
     UsersModule,
     AuthModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
