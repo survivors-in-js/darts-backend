@@ -58,7 +58,7 @@ export class Event {
   @IsString()
   public gameType: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
   public permissibleDischarge: string;
@@ -77,15 +77,15 @@ export class Event {
   })
   public age: AgeEnum;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   public groupsNumber: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   public circlesNumber: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   public legs: number;
 
@@ -96,17 +96,17 @@ export class Event {
   })
   public gridType: GridEnum;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
   public initialGrid: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsBoolean()
   public thirdPlaceGame: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   @IsNotEmpty()
   public targetsNumber: number;
@@ -114,27 +114,27 @@ export class Event {
   @ManyToMany(() => Participant, (participiant) => participiant.id)
   participiants: Participant[];
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
   public judge: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
   public secretary: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   @IsNotEmpty()
   public EKP: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   @IsNotEmpty()
   public place: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
   public degree: string;

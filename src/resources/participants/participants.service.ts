@@ -66,4 +66,8 @@ export class ParticipantsService {
   public async remove(id: number): Promise<void> {
     await this.participantsRepository.delete({ id });
   }
+
+  async find(options: any) {
+    return this.participantsRepository.find(options);
+  }
 }
