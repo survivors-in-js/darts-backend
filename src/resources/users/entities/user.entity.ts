@@ -17,7 +17,7 @@ export class User {
   public password: string;
 
   @Column({
-    default: RoleEnum.USER,
+    default: RoleEnum.ADMIN,
     type: 'enum',
     enum: RoleEnum,
   })
