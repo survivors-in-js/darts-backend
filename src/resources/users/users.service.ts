@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +16,14 @@ export class UsersService {
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
     const { password, email } = createUserDto;
+    const userByEmail = await this.findByEmail(email);
+
+    if (userByEmail) {
+      throw new HttpException(
+        'Email уже зарегистрирован',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
         password: hash,
