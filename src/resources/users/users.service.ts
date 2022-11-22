@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,10 +19,7 @@ export class UsersService {
     const userByEmail = await this.findByEmail(email);
 
     if (userByEmail) {
-      throw new HttpException(
-        'Email уже зарегистрирован',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new ConflictException('Email уже зарегистрирован');
     }
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
