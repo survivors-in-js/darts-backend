@@ -44,7 +44,7 @@ export class ParticipantsController {
     image: Express.Multer.File,
   ): Promise<{ fileNameUuid: string }> {
     return this.participantsService.uploadFile(parseInt(id), image);
-  } 
+  }
 
   @Get()
   public findAll(): Promise<Participant[]> {
