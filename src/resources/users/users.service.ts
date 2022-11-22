@@ -22,7 +22,7 @@ export class UsersService {
         email: email,
       }),
     );
-    return await this.findByEmail(email);
+    return await this.findByEmailPublic(email);
   }
 
   public async createSuperAdmin(createUserDto: CreateUserDto): Promise<User> {
@@ -91,6 +91,13 @@ export class UsersService {
   public async findByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({
       where: { email: email },
+    });
+  }
+
+  public async findByEmailPublic(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { email: email },
+      select: { id: true, email: true, role: true },
     });
   }
 }
