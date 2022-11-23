@@ -111,8 +111,10 @@ export class Event {
   @IsNotEmpty()
   public targetsNumber: number;
 
-  @ManyToMany(() => Participant, (participiant) => participiant.id)
-  participiants: Participant[];
+  @ManyToMany(() => Participant, (participants) => participants.events, {
+    cascade: true,
+  })
+  public participants: Participant[];
 
   @Column({ nullable: true })
   @IsNotEmpty()

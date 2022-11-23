@@ -21,7 +21,7 @@ export class CreateEventDto {
   public initialGrid: string;
   public thirdPlaceGame: boolean;
   public targetsNumber: number;
-  participiants: Participant[];
+  public participants: Participant[];
   public judge: string;
   public secretary: string;
   public EKP: number;

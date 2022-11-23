@@ -15,22 +15,37 @@ export class EventsService {
   ) {}
 
   public async create(createEventDto: CreateEventDto): Promise<Event> {
-    const participiants = await this.participiantService.find({
-      where: { id: In(createEventDto.participiants || []) },
+    const participants = await this.participiantService.find({
+      where: { id: In(createEventDto.participants || []) },
     });
-    const event = await this.eventRepository.create({
+    const event = this.eventRepository.create({
       ...createEventDto,
-      participiants,
+      participants,
     });
     return this.eventRepository.save(event);
   }
 
   public async findAll() {
-    return this.eventRepository.find();
+    return this.eventRepository.find({
+      relations: {
+        participants: true,
+      },
+    });
   }
 
-  public async findOne(id: number) {
+  public async findOneById(id: number) {
     return this.eventRepository.findOneBy({ id });
+  }
+
+  public async findOneByIdWithRelations(id: number) {
+    return this.eventRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        participants: true,
+      },
+    });
   }
 
   public async update(
@@ -38,7 +53,7 @@ export class EventsService {
     updateEventDto: UpdateEventDto,
   ): Promise<Event> {
     await this.eventRepository.update(id, updateEventDto);
-    return this.findOne(id);
+    return this.findOneById(id);
   }
 
   public async remove(id: number) {

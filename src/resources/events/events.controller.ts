@@ -32,7 +32,7 @@ export class EventsController {
   @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Event> {
-    return this.eventsService.findOne(+id);
+    return this.eventsService.findOneByIdWithRelations(parseInt(id));
   }
   @UseGuards(JwtGuard)
   @Patch(':id')
@@ -40,11 +40,11 @@ export class EventsController {
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
   ): Promise<Event> {
-    return this.eventsService.update(+id, updateEventDto);
+    return this.eventsService.update(parseInt(id), updateEventDto);
   }
   @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.eventsService.remove(+id);
+    return this.eventsService.remove(parseInt(id));
   }
 }
