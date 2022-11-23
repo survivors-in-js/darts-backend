@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from 'src/files/files.service';
-import { Repository } from 'typeorm';
+import { Between, FindOperator, Repository } from 'typeorm';
 import { CreateParticipantDto } from './dto/create-participant.dto';
+import { FindParticipantDto } from './dto/find-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
 import { Participant } from './entities/participant.entity';
 
@@ -30,6 +31,36 @@ export class ParticipantsService {
 
   public async findOne(id: number): Promise<Participant> {
     return this.participantsRepository.findOneBy({ id });
+  }
+
+  private getRangeOfDateBirthes(age: number): FindOperator<Date> | null {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDay();
+
+    const yearFrom = year - age - 1;
+    const yearTo = year - age;
+
+    const dateFrom = `${yearFrom}-${month}-${day}`;
+    const dateTo = `${yearTo}-${month}-${day}`;
+
+    if (age) {
+      return Between(new Date(dateFrom), new Date(dateTo));
+    } else {
+      return null;
+    }
+  }
+
+  public async findByQuery(
+    findParticipantDto: FindParticipantDto,
+  ): Promise<Participant[]> {
+    const { age, ...rest } = findParticipantDto;
+    const rangeOfDateBirthes = this.getRangeOfDateBirthes(age);
+
+    return this.participantsRepository.find({
+      where: { ...rest, dateOfBirth: rangeOfDateBirthes },
+    });
   }
 
   public async update(
