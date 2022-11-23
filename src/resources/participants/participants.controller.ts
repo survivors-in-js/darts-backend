@@ -17,6 +17,7 @@ import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Participant } from './entities/participant.entity';
+import { FindParticipantDto } from './dto/find-participant.dto';
 
 @Controller('participants')
 export class ParticipantsController {
@@ -44,6 +45,13 @@ export class ParticipantsController {
     image: Express.Multer.File,
   ): Promise<{ fileNameUuid: string }> {
     return this.participantsService.uploadFile(parseInt(id), image);
+  }
+
+  @Post('search')
+  public find(
+    @Body() findParticipantDto: FindParticipantDto,
+  ): Promise<Participant> {
+    return this.participantsService.findByQuery(findParticipantDto);
   }
 
   @Get()
