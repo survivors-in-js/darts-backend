@@ -27,9 +27,7 @@ export class EventsService {
 
   public async findAll() {
     return this.eventRepository.find({
-      relations: {
-        participants: true,
-      },
+      relations: ['participants'],
     });
   }
 
@@ -42,9 +40,7 @@ export class EventsService {
       where: {
         id: id,
       },
-      relations: {
-        participants: true,
-      },
+      relations: ['participants'],
     });
   }
 

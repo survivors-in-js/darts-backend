@@ -161,7 +161,7 @@ export class Participant {
   public image: string;
 
   @ManyToMany(() => Event, (event) => event.participants, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinTable()
   events: Event[];

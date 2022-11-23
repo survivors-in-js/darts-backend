@@ -112,7 +112,7 @@ export class Event {
   public targetsNumber: number;
 
   @ManyToMany(() => Participant, (participants) => participants.events, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   public participants: Participant[];
 
