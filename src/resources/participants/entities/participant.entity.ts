@@ -160,7 +160,7 @@ export class Participant {
   @Column({ nullable: true })
   public image: string;
 
-  @ManyToMany(() => Event, (event) => event.participiants, {
+  @ManyToMany(() => Event, (event) => event.participants, {
     cascade: true,
   })
   @JoinTable()
