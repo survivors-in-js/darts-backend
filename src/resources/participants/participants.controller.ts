@@ -50,7 +50,7 @@ export class ParticipantsController {
   @Post('search')
   public find(
     @Body() findParticipantDto: FindParticipantDto,
-  ): Promise<Participant> {
+  ): Promise<Participant[]> {
     return this.participantsService.findByQuery(findParticipantDto);
   }
 
