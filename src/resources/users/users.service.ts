@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,19 +14,20 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async create(
-    createUserDto: CreateUserDto,
-    isCreatingBySuperAdmin = false,
-  ): Promise<User> {
-    const { password, email, role } = createUserDto;
+  public async create(createUserDto: CreateUserDto): Promise<User> {
+    const { password, email } = createUserDto;
+    const userByEmail = await this.findByEmail(email);
+
+    if (userByEmail) {
+      throw new ConflictException('Email уже зарегистрирован');
+    }
     await bcrypt.hash(password, 10).then((hash) =>
       this.userRepository.save({
         password: hash,
         email: email,
-        role: isCreatingBySuperAdmin && role ? role : RoleEnum.USER,
       }),
     );
-    return await this.findByEmail(email);
+    return await this.findByEmailPublic(email);
   }
 
   public async createSuperAdmin(createUserDto: CreateUserDto): Promise<User> {
@@ -86,25 +87,7 @@ export class UsersService {
     });
   }
 
-  public async updateRole(id: number, user: UpdateUserDto): Promise<User> {
-    const { role, ...res } = user;
-    await this.userRepository.update(id, {
-      role: role,
-    });
-    return await this.findOne(id);
-  }
-
   // гоша твой выход. твой тикет. делай што хочешь
-  public async resetPassword(id: number, user: UpdateUserDto): Promise<User> {
-    const { password } = user;
-    await bcrypt.hash(password, 10).then((hash) =>
-      this.userRepository.update(id, {
-        password: hash,
-      }),
-    );
-    return await this.findOne(id);
-  }
-
   public async remove(id: number): Promise<any> {
     await this.userRepository.delete({ id });
     return 'Пользователь удалён';
@@ -113,6 +96,13 @@ export class UsersService {
   public async findByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({
       where: { email: email },
+    });
+  }
+
+  public async findByEmailPublic(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { email: email },
+      select: { id: true, email: true, role: true },
     });
   }
 }
