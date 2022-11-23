@@ -67,7 +67,7 @@ export class ParticipantsService {
     await this.participantsRepository.delete({ id });
   }
 
-  async find(options: any) {
+  public async find(options: any): Promise<Participant[]> {
     return this.participantsRepository.find(options);
   }
 }

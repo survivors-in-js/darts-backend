@@ -39,7 +39,7 @@ export class Participant {
   @IsString()
   public patronymic: string;
 
-  @Column()
+  @Column({ type: 'date' })
   @IsNotEmpty()
   @IsDate()
   public dateOfBirth: Date;
@@ -68,7 +68,7 @@ export class Participant {
   @Length(10)
   public seriesAndNumber: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date' })
   @IsDate()
   public dateOfIssue: Date;
 
@@ -96,7 +96,7 @@ export class Participant {
   @IsString()
   public category: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date' })
   @IsDate()
   public аssigned: Date;
 
@@ -121,11 +121,11 @@ export class Participant {
   @IsOptional()
   public policyNumber: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date' })
   @IsDate()
   public startOfAction: Date;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date' })
   @IsDate()
   public endOfAction: Date;
 
@@ -145,7 +145,7 @@ export class Participant {
   @IsString()
   public educationalInstitution: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date' })
   @IsDate()
   public endOfEducation: Date;
 

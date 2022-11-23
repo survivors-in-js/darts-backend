@@ -1,5 +1,4 @@
 import { AgeEnum, GenderEnum, GridEnum } from 'src/config/events.enum';
-import { Participant } from 'src/resources/participants/entities/participant.entity';
 
 export class CreateEventDto {
   public id: number;
@@ -21,7 +20,7 @@ export class CreateEventDto {
   public initialGrid: string;
   public thirdPlaceGame: boolean;
   public targetsNumber: number;
-  public participants: Participant[];
+  public participants: number[];
   public judge: string;
   public secretary: string;
   public EKP: number;

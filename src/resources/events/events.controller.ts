@@ -20,31 +20,34 @@ export class EventsController {
 
   @UseGuards(JwtGuard)
   @Post()
-  create(@Body() createEventDto: CreateEventDto): Promise<Event> {
+  public create(@Body() createEventDto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(createEventDto);
   }
 
   @UseGuards(JwtGuard)
   @Get()
-  findAll(): Promise<Event[]> {
+  public findAll(): Promise<Event[]> {
     return this.eventsService.findAll();
   }
+
   @UseGuards(JwtGuard)
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Event> {
+  public findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOneByIdWithRelations(parseInt(id));
   }
+
   @UseGuards(JwtGuard)
   @Patch(':id')
-  update(
+  public update(
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
   ): Promise<Event> {
     return this.eventsService.update(parseInt(id), updateEventDto);
   }
+
   @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  public remove(@Param('id') id: string): Promise<void> {
     return this.eventsService.remove(parseInt(id));
   }
 }

@@ -6,6 +6,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { ParticipantsService } from '../participants/participants.service';
+import { Participant } from '../participants/entities/participant.entity';
 @Injectable()
 export class EventsService {
   constructor(
@@ -15,9 +16,9 @@ export class EventsService {
   ) {}
 
   public async create(createEventDto: CreateEventDto): Promise<Event> {
-    const participants = await this.participiantService.find({
-      where: { id: In(createEventDto.participants || []) },
-    });
+    const participants = await this.findParticipantsByIds(
+      createEventDto.participants,
+    );
     const event = this.eventRepository.create({
       ...createEventDto,
       participants,
@@ -37,9 +38,7 @@ export class EventsService {
 
   public async findOneByIdWithRelations(id: number) {
     return this.eventRepository.findOne({
-      where: {
-        id: id,
-      },
+      where: { id },
       relations: ['participants'],
     });
   }
@@ -48,11 +47,22 @@ export class EventsService {
     id: number,
     updateEventDto: UpdateEventDto,
   ): Promise<Event> {
-    await this.eventRepository.update(id, updateEventDto);
+    const participants = await this.findParticipantsByIds(
+      updateEventDto.participants,
+    );
+    await this.eventRepository.save({ ...updateEventDto, participants, id });
     return this.findOneById(id);
   }
 
-  public async remove(id: number) {
+  public async remove(id: number): Promise<void> {
     await this.eventRepository.delete({ id });
+  }
+
+  private async findParticipantsByIds(
+    participantIds: number[] = [],
+  ): Promise<Participant[]> {
+    return this.participiantService.find({
+      where: { id: In(participantIds) },
+    });
   }
 }
