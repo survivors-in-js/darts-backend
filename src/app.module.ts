@@ -13,6 +13,8 @@ import { UsersModule } from './resources/users/users.module';
 import { User } from './resources/users/entities/user.entity';
 import { Participant } from './resources/participants/entities/participant.entity';
 import { AuthModule } from './auth/auth.module';
+import { Event } from './resources/events/entities/event.entity';
+import { EventsModule } from './resources/events/events.module';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
       username: configs().database.username,
       password: configs().database.password,
       database: configs().database.databaseName,
-      entities: [User, Participant],
+      entities: [User, Participant, Event],
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
@@ -37,6 +39,7 @@ import { AuthModule } from './auth/auth.module';
     FilesModule,
     UsersModule,
     AuthModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

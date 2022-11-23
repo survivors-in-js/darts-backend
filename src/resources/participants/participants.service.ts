@@ -97,4 +97,8 @@ export class ParticipantsService {
   public async remove(id: number): Promise<void> {
     await this.participantsRepository.delete({ id });
   }
+
+  public async find(options: any): Promise<Participant[]> {
+    return this.participantsRepository.find(options);
+  }
 }

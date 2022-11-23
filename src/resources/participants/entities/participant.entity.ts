@@ -8,7 +8,14 @@ import {
   Length,
   Min,
 } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Event } from 'src/resources/events/entities/event.entity';
 
 @Entity()
 export class Participant {
@@ -152,4 +159,10 @@ export class Participant {
 
   @Column({ nullable: true })
   public image: string;
+
+  @ManyToMany(() => Event, (event) => event.participants, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  events: Event[];
 }
