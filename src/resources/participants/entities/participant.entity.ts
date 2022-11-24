@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsDateString,
   IsEmail,
   IsInt,
   IsNotEmpty,
@@ -40,9 +41,9 @@ export class Participant {
   @IsString()
   public patronymic: string;
 
+  @Column()
   @IsNotEmpty()
-  @IsDate()
-  //@Column({ type: 'date' })
+  @IsDateString()
   public dateOfBirth: Date;
 
   @Column({
@@ -73,9 +74,8 @@ export class Participant {
   @Length(10)
   public seriesAndNumber: number;
 
-  //@Column({ nullable: true, type: 'date' })
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   public dateOfIssue: Date;
 
   @Column({ nullable: true })
@@ -102,9 +102,8 @@ export class Participant {
   @IsString()
   public category: string;
 
-  //@Column({ nullable: true, type: 'date' })
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   public аssigned: Date;
 
   @Column({ nullable: true })
@@ -128,14 +127,12 @@ export class Participant {
   @IsOptional()
   public policyNumber: number;
 
-  //@Column({ nullable: true, type: 'date' })
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   public startOfAction: Date;
 
-  //@Column({ nullable: true, type: 'date' })
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   public endOfAction: Date;
 
   @Column({ nullable: true })
@@ -154,9 +151,8 @@ export class Participant {
   @IsString()
   public educationalInstitution: string;
 
-  //@Column({ nullable: true, type: 'date' })
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   public endOfEducation: Date;
 
   @Column({ nullable: true })

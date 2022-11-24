@@ -28,7 +28,7 @@ export class CreateParticipantDto {
   public dateOfBirth: Date;
 
   @IsNotEmpty()
-  @IsEnum()
+  @IsEnum(GenderEnum)
   public gender: GenderEnum;
 
   @IsOptional()
