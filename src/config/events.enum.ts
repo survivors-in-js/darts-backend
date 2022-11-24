@@ -10,8 +10,8 @@ export enum AgeEnum {
 }
 
 export enum GridEnum {
-  ONE_LOOSE = 'elimination after defeat',
-  TWO_LOOSE = 'elimination after two defeats',
+  ONE_LOOSE = 'one_loose',
+  TWO_LOOSE = 'two_loose',
 }
 
 /* {
