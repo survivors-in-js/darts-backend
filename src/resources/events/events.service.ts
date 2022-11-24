@@ -7,6 +7,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { ParticipantsService } from '../participants/participants.service';
 import { Participant } from '../participants/entities/participant.entity';
+import { FilterEventDto } from './dto/filterEventsDto';
 @Injectable()
 export class EventsService {
   constructor(
@@ -40,6 +41,19 @@ export class EventsService {
     return this.eventRepository.findOne({
       where: { id },
       relations: ['participants'],
+    });
+  }
+  /// sortirovka event
+  public async sort(filterEventDto: FilterEventDto): Promise<Event[]> {
+    const { order, order_column, ...rest } = filterEventDto;
+    return this.eventRepository.find({
+      where: {
+        ...rest,
+      },
+      order: {
+        [order_column !== undefined ? order_column : 'createdAt']:
+          order !== undefined ? order : 'ASC',
+      },
     });
   }
 

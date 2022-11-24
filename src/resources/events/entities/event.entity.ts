@@ -8,7 +8,13 @@ import {
 } from 'class-validator';
 import { AgeEnum, GenderEnum, GridEnum } from 'src/config/events.enum';
 import { Participant } from 'src/resources/participants/entities/participant.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
@@ -17,6 +23,14 @@ export class Event {
   @Min(0)
   @PrimaryGeneratedColumn()
   public id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  @IsNotEmpty()
+  @IsBoolean()
+  public isVisible: boolean;
 
   @Column()
   @IsNotEmpty()

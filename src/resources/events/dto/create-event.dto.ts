@@ -2,6 +2,7 @@ import { AgeEnum, GenderEnum, GridEnum } from 'src/config/events.enum';
 
 export class CreateEventDto {
   public id: number;
+  public isVisible: boolean;
   public name: string;
   public rules: string;
   public address: string;

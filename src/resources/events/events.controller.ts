@@ -13,6 +13,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { FilterEventDto } from './dto/filterEventsDto';
 
 @Controller('events')
 export class EventsController {
@@ -22,6 +23,12 @@ export class EventsController {
   @Post()
   public create(@Body() createEventDto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(createEventDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('sort')
+  public sort(@Body() filterEventDto: FilterEventDto): Promise<Event[]> {
+    return this.eventsService.sort(filterEventDto);
   }
 
   @UseGuards(JwtGuard)
