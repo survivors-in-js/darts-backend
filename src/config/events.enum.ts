@@ -1,19 +1,18 @@
 export enum GenderEnum {
-  MALE = 'мужской',
-  FEMALE = 'женский',
+  MALE = 'male',
+  FEMALE = 'female',
 }
 
 export enum AgeEnum {
-  CHILDREN = 'до 15 лет',
-  TEENAGERS = 'юниоры',
-  GROWNUPS = 'взрослые',
+  CHILDREN = 'children',
+  TEENAGERS = 'teenagers',
+  GROWNUPS = 'grownups',
 }
 
 export enum GridEnum {
-  ONE_LOOSE = 'выбывание после поражения',
-  TWO_LOOSE = 'выбывание после двух поражений',
+  ONE_LOOSE = 'one_loose',
+  TWO_LOOSE = 'two_loose',
 }
-
 
 /* {
   "name": "fjgfgf",
@@ -42,5 +41,3 @@ export enum GridEnum {
   "degree": "ghfgg"
 }
  */
-
-
