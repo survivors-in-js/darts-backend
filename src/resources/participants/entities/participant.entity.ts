@@ -16,6 +16,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Event } from 'src/resources/events/entities/event.entity';
+import { GenderEnum } from 'src/config/events.enum';
 
 @Entity()
 export class Participant {
@@ -44,10 +45,14 @@ export class Participant {
   //@Column({ type: 'date' })
   public dateOfBirth: Date;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: GenderEnum,
+    default: null,
+  })
   @IsNotEmpty()
   @IsString()
-  public gender: string;
+  public gender: GenderEnum;
 
   @Column({ nullable: true })
   @IsString()

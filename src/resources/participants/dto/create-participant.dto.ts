@@ -1,12 +1,14 @@
 import {
   IsDateString,
   IsEmail,
+  IsEnum,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
   Length,
 } from 'class-validator';
+import { GenderEnum } from 'src/config/events.enum';
 
 export class CreateParticipantDto {
   @IsNotEmpty()
@@ -26,8 +28,8 @@ export class CreateParticipantDto {
   public dateOfBirth: Date;
 
   @IsNotEmpty()
-  @IsString()
-  public gender: string;
+  @IsEnum()
+  public gender: GenderEnum;
 
   @IsOptional()
   @IsString()
