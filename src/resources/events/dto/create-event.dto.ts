@@ -11,6 +11,11 @@ import {
 import { AgeEnum, GenderEnum, GridEnum } from 'src/config/events.enum';
 
 export class CreateEventDto {
+  public id: number;
+  @IsNotEmpty()
+  @IsBoolean()
+  public isVisible: boolean;
+
   @IsNotEmpty()
   @IsString()
   public name: string;

@@ -8,7 +8,13 @@ import {
 } from 'class-validator';
 import { AgeEnum, GenderEnum, GridEnum } from 'src/config/events.enum';
 import { Participant } from 'src/resources/participants/entities/participant.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
@@ -17,6 +23,14 @@ export class Event {
   @Min(0)
   @PrimaryGeneratedColumn()
   public id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  @IsNotEmpty()
+  @IsBoolean()
+  public isVisible: boolean;
 
   @Column()
   @IsNotEmpty()
@@ -51,16 +65,19 @@ export class Event {
   @Column()
   @IsNotEmpty()
   @IsString()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public discipline: string;
 
   @Column()
   @IsNotEmpty()
   @IsString()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public gameType: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public permissibleDischarge: string;
 
   @Column({
@@ -99,6 +116,7 @@ export class Event {
   @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public initialGrid: string;
 
   @Column({ nullable: true })
@@ -109,6 +127,7 @@ export class Event {
   @Column({ nullable: true })
   @IsInt()
   @IsNotEmpty()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public targetsNumber: number;
 
   @ManyToMany(() => Participant, (participants) => participants.events, {
@@ -139,5 +158,6 @@ export class Event {
   @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
+  // TODO: нет списка значений в тз. переделать тип на enum когда будет список.
   public degree: string;
 }
