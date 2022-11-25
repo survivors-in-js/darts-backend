@@ -43,16 +43,15 @@ export class EventsService {
       relations: ['participants'],
     });
   }
-  /// sortirovka event
+
   public async sort(filterEventDto: FilterEventDto): Promise<Event[]> {
-    const { order, order_column, ...rest } = filterEventDto;
+    const { order, orderColumn, ...rest } = filterEventDto;
     return this.eventRepository.find({
       where: {
         ...rest,
       },
       order: {
-        [order_column !== undefined ? order_column : 'createdAt']:
-          order !== undefined ? order : 'ASC',
+        [orderColumn || 'createdAt']: order || 'ASC',
       },
     });
   }
