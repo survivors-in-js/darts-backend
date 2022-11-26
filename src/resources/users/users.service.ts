@@ -87,7 +87,6 @@ export class UsersService {
     });
   }
 
-  // гоша твой выход. твой тикет. делай што хочешь
   public async remove(id: number): Promise<any> {
     await this.userRepository.delete({ id });
     return 'Пользователь удалён';

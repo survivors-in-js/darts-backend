@@ -63,7 +63,6 @@ export class UsersController {
     return this.usersService.findOne(parseInt(req.user.id));
   }
 
-  // гоша твой выход. твой тикет. делай што хочешь
   @Roles(RoleEnum.SUPER_ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
   @Patch(':id')
