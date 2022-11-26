@@ -91,7 +91,6 @@ export class UsersController {
       throw new UnauthorizedException('Нельзя удалить Супер-Администратора');
   }
 
-  /// восстановление пароля
   @Post('/forget-password')
   public async restore(
     @Body() restoreUserPasswordDto: RestoreUserPasswordDto,
@@ -117,7 +116,6 @@ export class UsersController {
     }
   }
 
-  /// изменение пароля
   @UseGuards(JwtGuard)
   @Post('/change-password')
   public async change(

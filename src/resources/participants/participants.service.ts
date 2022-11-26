@@ -26,11 +26,14 @@ export class ParticipantsService {
   }
 
   public async findAll() {
-    return this.participantsRepository.find();
+    return this.participantsRepository.find({ relations: ['events'] });
   }
 
   public async findOne(id: number): Promise<Participant> {
-    return this.participantsRepository.findOneBy({ id });
+    return this.participantsRepository.findOne({
+      where: { id },
+      relations: ['events'],
+    });
   }
 
   private getRangeOfDateBirthes(age: number): FindOperator<Date> | null {
