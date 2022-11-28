@@ -44,7 +44,9 @@ export class EventsService {
     });
   }
 
-  public async sort(filterEventDto: FilterEventDto): Promise<Event[]> {
+  public async findWithFilters(
+    filterEventDto: FilterEventDto,
+  ): Promise<Event[]> {
     const { order, orderColumn, ...rest } = filterEventDto;
     return this.eventRepository.find({
       where: {

@@ -13,4 +13,9 @@ export default () => ({
   },
   emailSuperAdmin: process.env.SUPER_ADMIN_EMAIL || 'superadmin@test.ru',
   jwtSecret: 'jwtSecret',
+  nodemailer: {
+    user: 'darts.club2022',
+    pass: 'ofagsyuqlazgllzf',
+    fromEmail: 'darts.club2022@gmail.com',
+  },
 });

@@ -4,6 +4,9 @@
 - Node.js 14.18.3
 - PostgreSQL 15.1 (Ubuntu 15.1-1.pgdg22.04+1)
 
+### ТЗ проекта
+- https://www.notion.so/Workspace-9bdd0c3a41534c66b40ef3af785ae21b
+
 ### Инструкция по запуску
 - создать в Postgres юзера darts, пароль darts, база данных darts.
 - наделить юзера darts правами писать в базе darts.
