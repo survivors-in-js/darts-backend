@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable } from '@nestjs/common';
-
+import { config } from 'dotenv';
+import configs from '../config/emailservice-config';
 require('dotenv').config();
 
 const nodemailer = require('nodemailer');
@@ -8,16 +9,16 @@ const nodemailer = require('nodemailer');
 @Injectable()
 export class EmailSender {
   private transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: configs().service,
     auth: {
-      user: 'darts.club2022',
-      pass: 'ofagsyuqlazgllzf',
+      user: configs().user,
+      pass: configs().pass,
     },
   });
 
   public async sendemail(email: string, text: string): Promise<void> {
     const mailOptions = {
-      from: 'darts.club2022@gmail.com',
+      from: configs().corporateMail,
       to: email,
       subject: 'обновленный пароль',
       text: text,

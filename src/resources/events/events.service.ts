@@ -43,8 +43,10 @@ export class EventsService {
       relations: ['participants'],
     });
   }
-  /// sortirovka event
-  public async sort(filterEventDto: FilterEventDto): Promise<Event[]> {
+
+  public async findWithFiltres(
+    filterEventDto: FilterEventDto,
+  ): Promise<Event[]> {
     const { order, order_column, ...rest } = filterEventDto;
     return this.eventRepository.find({
       where: {

@@ -28,7 +28,7 @@ export class EventsController {
   @UseGuards(JwtGuard)
   @Post('sort')
   public sort(@Body() filterEventDto: FilterEventDto): Promise<Event[]> {
-    return this.eventsService.sort(filterEventDto);
+    return this.eventsService.findWithFiltres(filterEventDto);
   }
 
   @UseGuards(JwtGuard)
