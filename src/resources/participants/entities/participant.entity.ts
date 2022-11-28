@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsDateString,
   IsEmail,
   IsInt,
   IsNotEmpty,
@@ -16,6 +17,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Event } from 'src/resources/events/entities/event.entity';
+import { GenderEnum } from 'src/config/events.enum';
 
 @Entity()
 export class Participant {
@@ -39,15 +41,19 @@ export class Participant {
   @IsString()
   public patronymic: string;
 
-  @Column({ type: 'date' })
-  @IsNotEmpty()
-  @IsDate()
-  public dateOfBirth: Date;
-
   @Column()
   @IsNotEmpty()
+  @IsDateString()
+  public dateOfBirth: Date;
+
+  @Column({
+    type: 'enum',
+    enum: GenderEnum,
+    default: null,
+  })
+  @IsNotEmpty()
   @IsString()
-  public gender: string;
+  public gender: GenderEnum;
 
   @Column({ nullable: true })
   @IsString()
@@ -68,8 +74,8 @@ export class Participant {
   @Length(10)
   public seriesAndNumber: number;
 
-  @Column({ nullable: true, type: 'date' })
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   public dateOfIssue: Date;
 
   @Column({ nullable: true })
@@ -96,8 +102,8 @@ export class Participant {
   @IsString()
   public category: string;
 
-  @Column({ nullable: true, type: 'date' })
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   public аssigned: Date;
 
   @Column({ nullable: true })
@@ -121,12 +127,12 @@ export class Participant {
   @IsOptional()
   public policyNumber: number;
 
-  @Column({ nullable: true, type: 'date' })
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   public startOfAction: Date;
 
-  @Column({ nullable: true, type: 'date' })
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   public endOfAction: Date;
 
   @Column({ nullable: true })
@@ -145,8 +151,8 @@ export class Participant {
   @IsString()
   public educationalInstitution: string;
 
-  @Column({ nullable: true, type: 'date' })
-  @IsDate()
+  @Column({ nullable: true })
+  @IsDateString()
   public endOfEducation: Date;
 
   @Column({ nullable: true })
